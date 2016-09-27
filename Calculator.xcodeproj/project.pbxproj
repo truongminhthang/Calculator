@@ -39,6 +39,7 @@
 		8468F3B01D98FBA600055729 /* CalculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalculatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8468F3B21D98FBA600055729 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
 		8468F3B41D98FBA600055729 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84D185B41D9A08AA009321B6 /* Example.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Example.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +63,7 @@
 		8468F38C1D98F3FE00055729 = {
 			isa = PBXGroup;
 			children = (
+				84D185B41D9A08AA009321B6 /* Example.playground */,
 				8468F3971D98F3FE00055729 /* Calculator */,
 				8468F3B11D98FBA600055729 /* CalculatorTests */,
 				8468F3961D98F3FE00055729 /* Products */,
@@ -423,6 +425,7 @@
 				8468F3B91D98FBA600055729 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

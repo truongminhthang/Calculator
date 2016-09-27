@@ -52,7 +52,7 @@ class CalculatorTests: XCTestCase {
     
     func testAddOperator4() {
         input(text: "10+22+50")
-        XCTAssertTrue(calculator!.displayValue == "82", "Error: Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator!.displayValue == "50", "Error: Display value display wrong when tap Operator")
         XCTAssertTrue(calculator.operatan == 32, "Error: Creating operatan doesn't success")
     }
     
@@ -95,6 +95,71 @@ class CalculatorTests: XCTestCase {
         XCTAssertTrue(calculator!.displayValue == "40", "Error: Display value display wrong when tap Operator")
         XCTAssertTrue(calculator.operatan == 40, "Error: Creating operatan doesn't success")
     }
+    
+    func testCombineAddAndMultifier() {
+        input(text: "50-10*")
+        XCTAssertTrue(calculator!.displayValue == "10", "Error: Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator.operatan == 10, "Error: Creating operatan doesn't success")
+    }
+    func testCombineAddAndMultifier1() {
+        input(text: "50-10*2")
+        XCTAssertTrue(calculator!.displayValue == "2", "Error: Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator.operatan == 10, "Error: Creating operatan doesn't success")
+    }
+    
+    func testCombineAddAndMultifier2() {
+        input(text: "50-10*2-")
+        XCTAssertTrue(calculator!.displayValue == "30", "Error: Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator.operatan == 30, "Error: Creating operatan doesn't success")
+    }
+    
+    func testCombineAddAndMultifier3() {
+        input(text: "50-10*2=")
+        XCTAssertTrue(calculator!.displayValue == "30", "Error: Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator.operatan == 30, "Error: Creating operatan doesn't success")
+    }
+    
+    func testCombineAddAndMultifier4() {
+        input(text: "50-10*2/2=")
+        XCTAssertTrue(calculator!.displayValue == "40", "Error: \(calculator!.displayValue) Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator.operatan == 40, "Error: Creating operatan doesn't success")
+    }
+    
+    func testCombineAddAndMultifier5() {
+        input(text: "50-10*2/2*")
+        XCTAssertTrue(calculator!.displayValue == "10", "Error: \(calculator!.displayValue) Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator.operatan == 10, "Error: Creating operatan doesn't success")
+    }
+    func testMultifyZero() {
+        input(text: "*9=")
+        XCTAssertTrue(calculator!.displayValue == "0", "Error: Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator.operatan == 0, "Error: Creating operatan doesn't success")
+    }
+    
+    func testPercent() {
+        input(text: "5%")
+        XCTAssertTrue(calculator!.displayValue == "0.05", "Error: Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator.operatan == 0.05, "Error: Creating operatan doesn't success")
+    }
+    
+    func testPercent1() {
+        input(text: "2+50%")
+        XCTAssertTrue(calculator!.displayValue == "0.5", "Error: Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator.operatan == 0.5, "Error: Creating operatan doesn't success")
+    }
+    
+    func testPercent2() {
+        input(text: "2+50%=")
+        XCTAssertTrue(calculator!.displayValue == "2.5", "Error: Display value display wrong when tap Operator")
+    }
+    
+    func testEqual() {
+        input(text: "===")
+        XCTAssertTrue(calculator!.displayValue == "0", "Error: Display value display wrong when tap Operator")
+        XCTAssertTrue(calculator.operatan == nil, "Error: Creating operatan doesn't success")
+    }
+    
+    
     
     func testPerformanceExample() {
         // This is an example of a performance test case.

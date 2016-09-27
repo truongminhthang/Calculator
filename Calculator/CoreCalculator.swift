@@ -10,21 +10,42 @@ import Foundation
 
 class CoreCalculator {
     var displayValue = "0"
-    var operatan: Double = 0.0 {
+    var operatan: Double! {
         didSet {
             displayValue = operatan.display
         }
     }
-    let numbersString = "0123456789."
+    var beforeOperatorString = ""
+    lazy var tempOperatan : Double = 0
+    lazy var tempBeforeOperatorString: String = ""
     var needToResetDisplayValue = false
     
-    func input(text: String) {
-        if text.isNumber {
-            appendString(numberString: text)
-        } else if text.isOperator {
-            onTapOperator(operatorString: text)
+    var isPendingState : Bool = false {
+        didSet {
+            if isPendingState == false && oldValue == true {
+                excute(operatan: tempOperatan, operatorString: tempBeforeOperatorString)
+                tempOperatan = 0
+                tempBeforeOperatorString = ""
+            }
         }
-        
+    }
+    
+    func input(text: String) {
+        switch text {
+        case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".":
+            appendString(numberString: text)
+        case "*", "/":
+            onTapMultiplyAndDivide(nowOperatorString: text)
+        case "+", "-":
+            onTapAddAndSubtract(nowOperatorString: text)
+        case "=":
+            onTapEqual()
+        case "%":
+            onTapPercent()
+            
+        default:
+            break
+        }
     }
     
     func appendString(numberString: String) {
@@ -35,38 +56,79 @@ class CoreCalculator {
         displayValue.append(numberString)
     }
     
-    func onTapOperator(operatorString: String) {
+    func onTapEqual() {
+        if operatan != nil {
+            excute(operatan: operatan, operatorString: beforeOperatorString)
+            isPendingState = false
+        }
+        beforeOperatorString = ""
+    }
+    
+    func onTapPercent() {
+        if "+-".contains(beforeOperatorString) {
+            if isPendingState == false {
+                tempOperatan = operatan
+                tempBeforeOperatorString = beforeOperatorString
+                operatan = (Double(displayValue) ?? 0.0) / 100
+                isPendingState = true
+            }
+        } else if beforeOperatorString == "" {
+            operatan = (Double(displayValue) ?? 0.0) / 100
+        }
+    }
+    
+    func onTapMultiplyAndDivide(nowOperatorString: String) {
+        needToResetDisplayValue = true
+        if beforeOperatorString != "" {
+            if "+-".contains(beforeOperatorString) {
+                if isPendingState == false {
+                    tempOperatan = operatan
+                    tempBeforeOperatorString = beforeOperatorString
+                    operatan = (Double(displayValue) ?? 0.0)
+                    isPendingState = true
+                }
+            } else {
+                excute(operatan: operatan, operatorString: beforeOperatorString)
+            }
+        } else {
+            operatan = (Double(displayValue) ?? 0.0)
+        }
+        beforeOperatorString = nowOperatorString
+    }
+    
+    func onTapAddAndSubtract(nowOperatorString: String) {
+        needToResetDisplayValue = true
+        if beforeOperatorString != "" {
+            excute(operatan: operatan, operatorString: beforeOperatorString)
+            isPendingState = false
+        } else {
+            operatan = (Double(displayValue) ?? 0.0)
+        }
+        beforeOperatorString = nowOperatorString
+    }
+    
+    func excute(operatan: Double, operatorString: String) {
         switch operatorString {
         case "+":
-            add()
+            self.operatan = operatan + (Double(displayValue) ?? 0.0)
         case "-":
-            add()
+            self.operatan = operatan - (Double(displayValue) ?? 0.0)
         case "*":
-            add()
+            self.operatan = operatan * (Double(displayValue) ?? 0.0)
         case "/":
-            add()
-
+            self.operatan = operatan / (Double(displayValue) ?? 0.0)
         default:
             break
         }
     }
-    
-    func add(){
-        needToResetDisplayValue = true
-        operatan = operatan + (Double(displayValue) ?? 0.0)
-        
-    }
-    
-    
 }
 
 extension Double {
     var display: String {
-        self.truncatingRemainder(dividingBy: 1)
-        if  truncatingRemainder > 0 && truncatingRemainder < 1 {
-            return "\(self)"
-        } else {
+        if self.truncatingRemainder(dividingBy: 1) == 0 {
             return String(format: "%.0f", self)
+        } else {
+            return "\(self)"
         }
     }
 }
@@ -82,6 +144,12 @@ extension String {
     var isOperator: Bool {
         let operatorString = "+-*/"
         if (self.characters.count == 1 && operatorString.contains(self)) {
+            return true
+        }
+        return false
+    }
+    var isEqualOperator: Bool {
+        if (self.characters.count == 1 && "=".contains(self)) {
             return true
         }
         return false
